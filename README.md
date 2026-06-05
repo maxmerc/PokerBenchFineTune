@@ -13,14 +13,11 @@ python -m venv .venv
 
 # 2. Dependencies
 pip install -r requirements.txt
-
-# 3. Azure auth — required for deploying and cleaning up endpoints
-az login
 ```
 
 ## Running the notebook
 
-Open `cis5270_pokerbench_local.ipynb` in VSCode (or `jupyter lab`). **Section 0
+Open `pokerbench_finetune_public.ipynb` in VSCode (or `jupyter lab`). **Section 0
 is the only cell you edit between runs** — everything else is flag-driven.
 
 ### Default flags → "deploy existing models and evaluate"
@@ -36,8 +33,7 @@ DELETE_DEPLOYMENTS_AT_END = True
 ```
 
 Running top-to-bottom with these flags: loads cached data → deploys existing
-SFT + DPO → evaluates on 500 test rows → produces plots and CSV → cleans up
-deployments. **This is the workflow for the draft report.**
+SFT + DPO → evaluates on 500 test rows → produces plots and CSV
 
 ### To retrain
 
@@ -54,21 +50,11 @@ grids in Section 7.4 if you want 3×3.
 
 ## Important notes
 
-- **Deployments auto-terminate after 4 hours** on this course's Azure setup.
-  Deploy → eval → cleanup must all finish inside one 4h window. The notebook
-  logs time-sensitive warnings in Section 9.
-- **Deployment creation requires TA coordination** per course policy. If
-  `begin_create_or_update` fails with a quota/permission error, ping the TAs
-  before retrying.
 - **State persists** across kernel restarts in `finetuned_state.json` —
   model IDs, file IDs, prompt versions, deployment names, baseline accuracy,
   results.
 - **Caches** live in `./cache/` (~1.6 GB for PokerBench). Delete them to force
   re-download.
-- **DPO prompt-version fix:** the existing DPO model was trained under
-  `v1_long_system`, but current run defaults to `v2_no_system`. Evaluation
-  auto-picks the right prompt per-model via `build_messages(..., prompt_version=...)`
-  in Section 2.1.
 
 ## Files produced during a run
 
@@ -83,14 +69,3 @@ sft_train.jsonl, sft_val.jsonl      # (if REBUILD_DATA=True)
 dpo_train.jsonl, dpo_val.jsonl      # (if REBUILD_DATA=True)
 rft_train.jsonl, rft_val.jsonl      # (if REBUILD_DATA and RUN_RFT)
 ```
-
-## Troubleshooting
-
-- **Baseline eval fails:** the base `gpt-4.1-nano` deployment may not exist on
-  your account. Either deploy it manually first (no fine-tuning) or set
-  `BASELINE_OVERRIDE = <float>` in Section 0 to skip with a cached number.
-- **Safety filter rejections on training:** the sanitizer in Section 4.4
-  replaces "all-in" → "shove" and strips role-prime wording. If a new run
-  still fails, check the training file for other trigger phrases.
-- **`az` not on PATH:** install the Azure CLI. Data prep + training don't need
-  it; deploy + cleanup do.
