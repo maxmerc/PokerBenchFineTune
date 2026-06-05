@@ -2,7 +2,7 @@
 
 Port of the original Colab notebook for CIS 4270/5270 Trustworthy ML. Runs SFT
 and DPO fine-tuning of `gpt-4.1-nano` on PokerBench via Azure OpenAI. RFT is
-preserved but gated off (course-wide hold).
+preserved but gated off.
 
 ## One-time setup
 
