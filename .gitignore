@@ -1,0 +1,31 @@
+# Virtual environment
+.venv/
+
+# Large data / cache
+cache/
+*.pkl
+*.jsonl
+
+# Training state / sample tracking
+finetuned_state.json
+finetuned_state_v2.json
+
+# Report PDF
+PokerBench_FineTune_Report.pdf
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.ipynb_checkpoints/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Push script (local helper only)
+push_to_github.ps1
+
+# Original notebook with secrets (use pokerbench_finetune_public.ipynb instead)
+pokerbench_local_finetune.ipynb
+cis5270_pokerbench_local.ipynb
